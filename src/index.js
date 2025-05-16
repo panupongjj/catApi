@@ -1,9 +1,9 @@
 // Importing & instantiating express
 // General module import
 const express = require('express');
-const dotENV = require('dotenv')
 const { urlencoded } = require('express');
-dotENV.config()
+const configs = require('./configs')
+
 
 // Import router that been refactored
 const catsRoute = require('./routes/catsRoute');
@@ -15,6 +15,9 @@ const app = express();
 
 
 // Connection to DB 
+const dbConnect = require('./utils/dbConnect')
+dbConnect();
+
 
 // Middleware -- > all the tools that you want to use in yours project 
 app.use(express.json()) // POST/PUT 
@@ -43,7 +46,6 @@ app.use((req, res) => {
 
 
 // Port listener
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-      console.log(`Listening on port ${PORT} !!!~~`);
+app.listen(configs.Port, () => {
+      console.log(`Listening on port ${configs.Port} !!!~~`);
 })
