@@ -7,7 +7,7 @@ const configs = require('./configs')
 
 // Import router that been refactored
 const catsRoute = require('./routes/catsRoute');
-const usersRoute = require('./routes/usersRoute');
+const authRoute = require('./routes/authRoute');
 
 
 // Instance of express for us to use
@@ -31,7 +31,7 @@ app.get('/', (req,res) => {
 })
 // ENDPOINT: Path of "/api/cat" & Method of POST
 app.use("/api/cats",catsRoute)
-app.use("/api/users",usersRoute)
+app.use("/api/auth",authRoute)
 
 
 
