@@ -7,6 +7,7 @@ const catsController = require('../controllers/catsController');
 
 
 // GET ROUTE
+// GET http://localhost:5000/api/cats
 router.get("/",catsController.getCats)
 
       /*
@@ -18,6 +19,7 @@ router.get("/",catsController.getCats)
 
 
 // POST ROUTE
+// POST http://localhost:5000/api/cats
 router.post("/",catsController.postCat)
       /*
       // Refactor ==> MOVE THIS TO catController in the postCat Function

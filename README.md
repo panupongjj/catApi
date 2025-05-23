@@ -6,9 +6,10 @@
 // npm npm i dotenv                 ==> for using .env 
 // npm i mongoose
 // npm i joi 
+// npm install jsonwebtoken
 
 
-
+//jsonwebtoken: https://jwt.io/
 
 // Importing & instantiating express
 // Connection to DB 
