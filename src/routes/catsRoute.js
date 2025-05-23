@@ -18,7 +18,7 @@ router.get("/",catsController.getCats)
 
 
 // POST ROUTE
-router.post("/",catsController.postCats)
+router.post("/",catsController.postCat)
       /*
       // Refactor ==> MOVE THIS TO catController in the postCat Function
       router.post("/",(req,res)=> {
