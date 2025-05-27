@@ -28,12 +28,12 @@ const register = async (req, res) =>{
       // Save the user to db
       await newUser.save();
 
-      // Generate token & issue res
-      const token = newUser.generateAuthToken();
-      res.header("x-auth-token", token)
+      // // Generate token & issue res
+      // const token = newUser.generateAuthToken();
+      // res.header("x-auth-token", token)
 
       let userData = _.pick(newUser, ["_id", "username", "email", "role"]);
-      userData.token = token;
+      // userData.token = token;
       res.status(200).send(userData);
 
     } catch(err) {
@@ -67,6 +67,7 @@ const login = async (req, res)=>{
       // AUTHENTICATION = LOGGED IN: ISSUE TOKEN & RESPONSE
       const token = existingUser.generateAuthToken();
       res.header("x-auth-token", token);
+      console.log(`x-auth-token = ${token}`);
       res.status(200).send(token);
       
     } catch(err) {
