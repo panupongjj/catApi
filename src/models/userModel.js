@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Joi = require("joi");
 const jwt = require('jsonwebtoken');
 const configs = require('../configs')
 
@@ -32,13 +31,7 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-/*
-  #######################################################################
-  ################ Waiting for refactor process #########################
-  #######################################################################
-  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-*/
-// BINDING METHOD TO MODEL:
+// BINDING METHOD generateAuthToken TO MODEL:
 userSchema.methods.generateAuthToken = function(){
   const token = jwt.sign({
       _id: this._id,
@@ -53,40 +46,4 @@ userSchema.methods.generateAuthToken = function(){
 const User = mongoose.model('User', userSchema);
 
 
-
-// VALIDATION FUNCTIONS
-// REGISTER VALIDATION
-function validateNewUser(user) {
-  const schema = Joi.object({
-    username: Joi.string().min(3).max(50).alphanum().required(),
-    email: Joi.string().min(5).max(255).required().email(),
-    password: Joi.string().min(5).max(1024).required(),
-  });
-
-  return schema.validate(user);
-}
-
-// LOGIN VALIDATION
-function validateLogin(user) {
-  const schema = Joi.object({
-    email: Joi.string().min(5).max(255).required().email(),
-    password: Joi.string().min(5).max(255).required(),
-  });
-
-  return schema.validate(user);
-}
-
-/*
-  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-  #######################################################################
-  ################ Waiting for refactor process #########################
-  #######################################################################
-*/
-
-// MODEL: Provides db functionality like "Add a new cat document to collection"
-
-
-
 exports.User = User;
-exports.validateNewUser = validateNewUser;
-exports.validateLogin = validateLogin;

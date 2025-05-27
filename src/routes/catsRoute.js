@@ -8,33 +8,12 @@ const catsController = require('../controllers/catsController');
 const verifyToken = require('../middleware/verifyAuth');
 const verifyAdmin = require('../middleware/verifyAdmin')
 
-// GET ROUTE
 // GET http://localhost:5000/api/cats
 router.get("/", verifyToken, catsController.getCats)
 
-      /*
-       // Refactor ==> MOVE THIS TO catController in the getCat Function
-      router.get("/", (req,res) =>{
-            res.send('🐱 Cat found inside the CatRoute !') 
-      });
-      */
-
-
-// POST ROUTE
 // POST http://localhost:5000/api/cats
 router.post("/", verifyToken, verifyAdmin, catsController.postCat)
-      /*
-      // Refactor ==> MOVE THIS TO catController in the postCat Function
-      router.post("/",(req,res)=> {
-         console.log(req.body);
-         //console.log(req.params.id);
-         res.status(200).json({
-            Name : req.body.Name,
-            Bread : req.body.Bread,
-            message: " 🔥 Request handles"
-         })
-      });
-      */
+
 
 //Export the router
 module.exports = router;

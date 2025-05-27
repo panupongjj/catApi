@@ -3,21 +3,15 @@ const bcrypt = require('bcrypt');
 const _ = require('lodash')
 
 //Internal import
-const {User,validateLogin,validateNewUser} = require('../models/userModel')
+const {User} = require('../models/userModel')
 
 const register = async (req, res) =>{
-    try {
+    
+  try {
       console.log(req.body)
-
-      // Validate raw req data
-      let { error } = validateNewUser(req.body);
-      if(error){
-        return res.status(400).send(error.details[0].message);
-      }
-
       // AUTH: Validate user is unique (email must be unique)
-      let user = await User.findOne({ email: req.body.email });
-      if(user){
+      let existingUser = await User.findOne({ email: req.body.email });
+      if(existingUser){
         // ERROR 400: DUPLICATE USER
         return res.status(400).send("Email already in use");
       }
@@ -27,7 +21,8 @@ const register = async (req, res) =>{
       let newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: await bcrypt.hash(req.body.password, salt)
+        password: await bcrypt.hash(req.body.password, salt),
+        role: req.body.role
       })
 
       // Save the user to db
@@ -52,42 +47,25 @@ const register = async (req, res) =>{
 
 
 
-
-// const login = (req,res)=>{
-//      console.log(req.body);
-//       res.status(200).json({
-//          name : req.body.name,
-//          userID : req.body.userID,
-//          message: " 🔥 Request handles Route-> authController "
-//       })
-// }
-
-
 const login = async (req, res)=>{
     try {
       console.log(req.body)
 
-      // Validate raw req data
-      let { error } = validateLogin(req.body);
-      if(error){
-        return res.status(400).send(error.details[0].message);
-      }
-
       // AUTH: Validate user is unique (email must be unique)
-      let user = await User.findOne({ email: req.body.email });
-      if(!user){
+      let existingUser = await User.findOne({ email: req.body.email });
+      if(!existingUser){
         // ERROR 400: DUPLICATE USER
         return res.status(400).send("Invalid email or password");
       }
 
       // AUTH: CHECK PASSWORD MATCHES
-      const validPassword = await bcrypt.compare(req.body.password, user.password)
+      const validPassword = await bcrypt.compare(req.body.password, existingUser.password)
       if(!validPassword){
         return res.status(400).send("Invalid email or password");
       }
 
       // AUTHENTICATION = LOGGED IN: ISSUE TOKEN & RESPONSE
-      const token = user.generateAuthToken();
+      const token = existingUser.generateAuthToken();
       res.header("x-auth-token", token);
       res.status(200).send(token);
       
