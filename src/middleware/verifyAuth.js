@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const configs = require("../configs");
 
 // CUSTOM MIDDLEWARE: Checks token is in header = AUTHENTICATED
-function auth(req, res, next) {
+const verifyToken = (req, res, next)=>{
   // FIND TOKEN IN HEADER
   const token = req.header("x-auth-token"); //Loads token from the header
   if (!token) {
@@ -20,14 +20,5 @@ function auth(req, res, next) {
   }
 }
 
-// CUSTOM MIDDLEWARE: Checks token has high privledge = AUTHORISED
-function admin(req, res, next) {
-  console.log(req.user)
-  if (req.user.role != "admin") {
-    return res.status(403).send("Access denied");
-  }
-  next();
-}
 
-exports.auth = auth;
-exports.admin = admin;
+module.exports = verifyToken;
