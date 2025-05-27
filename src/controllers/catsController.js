@@ -1,4 +1,5 @@
-const { Cat, validateCat} = require("../models/cats") ;
+
+const { Cat, validateCat} = require("../models/catsModel") ;
 
 module.exports = {
 // GET ALL CATS

@@ -2,13 +2,15 @@
 const express = require('express');
 const router = express.Router();
 
-// Import Controller to Handle qurey 
+// Import Controller to Handle query 
 const catsController = require('../controllers/catsController');
+// MIDDLE WARE
+const { auth, admin } = require('../middleware/verifyAuth')
 
 
 // GET ROUTE
 // GET http://localhost:5000/api/cats
-router.get("/",catsController.getCats)
+router.get("/", auth, catsController.getCats)
 
       /*
        // Refactor ==> MOVE THIS TO catController in the getCat Function
@@ -20,7 +22,7 @@ router.get("/",catsController.getCats)
 
 // POST ROUTE
 // POST http://localhost:5000/api/cats
-router.post("/",catsController.postCat)
+router.post("/", auth, admin, catsController.postCat)
       /*
       // Refactor ==> MOVE THIS TO catController in the postCat Function
       router.post("/",(req,res)=> {

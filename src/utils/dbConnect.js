@@ -5,13 +5,13 @@ const configs = require('../configs')
 //ENV Parameter
 
 
-
 const dbConnect = async() => {
    try{
       const connectionResult = await mongoose.connect(configs.connectionStr);
+      
+      
       if(connectionResult){
-         console.log("Connected to MongoDB");
-         console.log(configs.connectionStr);
+         console.log(`${configs.isCloud? "Connected to Cloud Atlas MongoDB" : "Connected to Local Docker MongoDB"}`);
       }
 
    }catch(err){

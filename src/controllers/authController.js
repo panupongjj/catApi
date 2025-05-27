@@ -1,15 +1,109 @@
+//External import
+const bcrypt = require('bcrypt');
+const _ = require('lodash')
 
-const register = (req,res)=>{
-    console.log(req.body);
-      res.send('USER found inside the Route-> authController  !') 
-}
-const login = (req,res)=>{
-     console.log(req.body);
-      res.status(200).json({
-         name : req.body.name,
-         userID : req.body.userID,
-         message: " 🔥 Request handles Route-> authController "
+//Internal import
+const {User,validateLogin,validateNewUser} = require('../models/userModel')
+
+const register = async (req, res) =>{
+    try {
+      console.log(req.body)
+
+      // Validate raw req data
+      let { error } = validateNewUser(req.body);
+      if(error){
+        return res.status(400).send(error.details[0].message);
+      }
+
+      // AUTH: Validate user is unique (email must be unique)
+      let user = await User.findOne({ email: req.body.email });
+      if(user){
+        // ERROR 400: DUPLICATE USER
+        return res.status(400).send("Email already in use");
+      }
+
+      // Generate user object document with HASHED PWD
+      const salt = await bcrypt.genSalt(10);
+      let newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: await bcrypt.hash(req.body.password, salt)
       })
+
+      // Save the user to db
+      await newUser.save();
+
+      // Generate token & issue res
+      const token = newUser.generateAuthToken();
+      res.header("x-auth-token", token)
+
+      let userData = _.pick(newUser, ["_id", "username", "email", "role"]);
+      userData.token = token;
+      res.status(200).send(userData);
+
+    } catch(err) {
+      // LOG ERROR + ISSUE 500 RESPONSE
+      console.log(err);
+      res.status(500).json({
+        message: "An internal server error has occurred 🔥"
+      })
+    }
 }
+
+
+
+
+// const login = (req,res)=>{
+//      console.log(req.body);
+//       res.status(200).json({
+//          name : req.body.name,
+//          userID : req.body.userID,
+//          message: " 🔥 Request handles Route-> authController "
+//       })
+// }
+
+
+const login = async (req, res)=>{
+    try {
+      console.log(req.body)
+
+      // Validate raw req data
+      let { error } = validateLogin(req.body);
+      if(error){
+        return res.status(400).send(error.details[0].message);
+      }
+
+      // AUTH: Validate user is unique (email must be unique)
+      let user = await User.findOne({ email: req.body.email });
+      if(!user){
+        // ERROR 400: DUPLICATE USER
+        return res.status(400).send("Invalid email or password");
+      }
+
+      // AUTH: CHECK PASSWORD MATCHES
+      const validPassword = await bcrypt.compare(req.body.password, user.password)
+      if(!validPassword){
+        return res.status(400).send("Invalid email or password");
+      }
+
+      // AUTHENTICATION = LOGGED IN: ISSUE TOKEN & RESPONSE
+      const token = user.generateAuthToken();
+      res.header("x-auth-token", token);
+      res.status(200).send(token);
+      
+    } catch(err) {
+      // LOG ERROR + ISSUE 500 RESPONSE
+      console.log(err);
+      res.status(500).json({
+        message: "An internal server error has occurred 🔥"
+      })
+    }
+  }
+
+
 
 module.exports = {login,register}
+
+
+// POST NEW USER
+

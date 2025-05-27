@@ -1,36 +1,22 @@
 ﻿# catApi
 
+GENERAL USAGE
 // npm init
 // npm install --save-dev nodemon
 // npm install express              ==> change script section at package.jason dev and bulid
 // npm npm i dotenv                 ==> for using .env 
+
+DATABASE USAGE
 // npm i mongoose
 // npm i joi 
+
+AUTHENTICATION USAGE
 // npm install jsonwebtoken
+// npm install bcrypt
 
+// npm i -g npm                     ==> Lodash
+// npm i --save lodash              ==> Lodash
 
-//jsonwebtoken: https://jwt.io/
-
-// Importing & instantiating express
-// Connection to DB 
-// Middleware
-// Routes [KEY]
-// Port listener
-
-
-
-Refactor 
-
-Routers
-   fileRouter.js
-      // Import express + router
-      const express = require('express');
-      const router = express.Router();
-
-      //
-
-      //Export the router
-      module.exports = router;
 
 
 git rm --cached .env

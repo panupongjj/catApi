@@ -20,6 +20,15 @@ const catSchema = new mongoose.Schema({
 // MODEL: Provides db functionality like "Add a new cat document to collection"
 const Cat = mongoose.model('Cat', catSchema);
 
+
+
+/*
+  #######################################################################
+  ################ Waiting for refactor process #########################
+  #######################################################################
+  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+*/
+
 // VALIDATION: We tell the user what IS and ISN'T allowed into the db collection
 function validateCat(cat){
   const schema = Joi.object({
@@ -28,6 +37,15 @@ function validateCat(cat){
   });
   return schema.validate(cat);
 }
+
+
+/*
+  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  #######################################################################
+  ################ Waiting for refactor process #########################
+  #######################################################################
+*/
+
 
 exports.Cat = Cat;
 exports.validateCat = validateCat;
